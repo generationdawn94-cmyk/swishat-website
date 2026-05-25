@@ -1,0 +1,2373 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SWISHA T — Official</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080808;
+    --deep: #0e0e0e;
+    --surface: #141414;
+    --card: #1a1a1a;
+    --border: #2a2a2a;
+    --mid: #444;
+    --muted: #666;
+    --warm: #aaa;
+    --white: #f0ede8;
+    --gold: #c8a45a;
+    --gold-dim: #8a6e35;
+    --red: #d43a2a;
+    --accent: #c8a45a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    cursor: default;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.022;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.98) 0%, transparent 100%);
+    backdrop-filter: blur(2px);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.12em;
+    color: var(--white);
+    cursor: pointer;
+    user-select: none;
+  }
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--warm);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.25s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 9px 20px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: var(--white); transform: translateY(-1px); }
+
+  /* ── SECTIONS ── */
+  section { display: none; min-height: 100vh; padding-top: 90px; }
+  section.active { display: block; }
+
+  /* ── HOME ── */
+  #home {
+    position: relative;
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  #home.active { display: flex; }
+
+  .home-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 70% 40%, rgba(200,164,90,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(212,58,42,0.04) 0%, transparent 50%),
+      var(--black);
+  }
+
+  .home-grid-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+  }
+
+  .home-content {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 0 64px;
+    padding-top: 60px;
+    gap: 0;
+  }
+
+  .home-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .home-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    padding-left: 40px;
+  }
+
+  .home-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .home-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(90px, 12vw, 200px);
+    line-height: 0.88;
+    letter-spacing: 0.01em;
+    color: var(--white);
+    margin-bottom: 0;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.35s forwards;
+  }
+
+  .home-title-line2 {
+    display: block;
+    color: var(--gold);
+    -webkit-text-stroke: 2px var(--gold);
+    color: transparent;
+    text-shadow: none;
+  }
+
+  .home-sub {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.55s forwards;
+  }
+
+  .home-tagline {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    max-width: 320px;
+    line-height: 1.8;
+  }
+
+  .home-stats {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+  .stat-item {
+    text-align: center;
+    padding: 20px 28px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    display: block;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .home-right-content {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    width: 100%;
+    max-width: 480px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+
+  .home-right-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 16px;
+  }
+
+  .home-featured-track {
+    border: 1px solid var(--border);
+    padding: 24px;
+    background: rgba(255,255,255,0.02);
+    position: relative;
+    overflow: hidden;
+  }
+  .home-featured-track::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--gold);
+  }
+  .home-track-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--white);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  .home-track-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    margin-bottom: 20px;
+  }
+
+  .home-collab-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .home-collab-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .home-collab-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--warm);
+  }
+  .home-collab-feat {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+  }
+
+  .home-cta-row {
+    margin-top: 52px;
+    display: flex;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--white); transform: translateY(-2px); }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, color 0.2s, transform 0.15s;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+  .home-scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+  }
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: var(--gold-dim);
+    animation: scrollPulse 2s infinite;
+  }
+  .scroll-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+
+  .home-marquee {
+    position: relative;
+    z-index: 2;
+    padding: 18px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    background: rgba(255,255,255,0.012);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marqueeScroll 20s linear infinite;
+    width: max-content;
+  }
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    padding: 0 40px;
+    white-space: nowrap;
+  }
+  .marquee-item span { color: var(--gold); margin-right: 40px; }
+
+  /* ── MUSIC ── */
+  #music { background: var(--black); }
+
+  .page-header {
+    padding: 60px 48px 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .page-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 8vw, 96px);
+    line-height: 1;
+    letter-spacing: 0.03em;
+    color: var(--white);
+  }
+  .page-title em {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--gold-dim);
+    font-style: normal;
+  }
+  .page-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    padding-bottom: 12px;
+  }
+
+  .section-body { padding: 48px; }
+
+  .spotify-embed-wrapper {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+  .spotify-embed-wrapper iframe {
+    display: block;
+    width: 100%;
+    border: none;
+  }
+
+  .releases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .release-card {
+    background: var(--surface);
+    padding: 24px;
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .release-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .release-card:hover { background: var(--card); }
+  .release-card:hover::before { width: 100%; }
+
+  .release-cover {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--border);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--gold-dim);
+    letter-spacing: 0.1em;
+    position: relative;
+    overflow: hidden;
+  }
+  .release-cover::after {
+    content: '▶';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(200,164,90,0.85);
+    color: var(--black);
+    font-size: 20px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .release-card:hover .release-cover::after { opacity: 1; }
+  .release-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .release-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .platform-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .platform-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--warm);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .platform-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .platform-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* ── VIDEOS ── */
+  #videos { background: var(--black); }
+
+  .video-featured {
+    margin: 0 48px 48px;
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    aspect-ratio: 16/9;
+    overflow: hidden;
+  }
+  .video-featured-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: linear-gradient(135deg, var(--surface) 0%, var(--card) 100%);
+  }
+  .video-play-btn {
+    width: 72px; height: 72px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: var(--gold);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .video-play-btn:hover {
+    background: var(--gold);
+    color: var(--black);
+    transform: scale(1.08);
+  }
+  .video-play-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .featured-badge {
+    position: absolute;
+    top: 20px; left: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 5px 12px;
+  }
+
+  .videos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 0 48px;
+    border: 1px solid var(--border);
+  }
+  .video-thumb {
+    background: var(--surface);
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .video-thumb:hover { background: var(--card); }
+  .video-thumb-icon {
+    width: 44px; height: 44px;
+    border: 1px solid rgba(200,164,90,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(200,164,90,0.6);
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  .video-thumb:hover .video-thumb-icon {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(200,164,90,0.1);
+    transform: scale(1.1);
+  }
+  .video-thumb-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 12px 16px;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--white);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: all 0.2s;
+  }
+  .video-thumb:hover .video-thumb-label { opacity: 1; transform: translateY(0); }
+
+  /* ── TOUR ── */
+  #tour { background: var(--black); }
+
+  .tour-intro {
+    padding: 0 48px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .tour-intro-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.9;
+    letter-spacing: 0.05em;
+  }
+  .tour-coming-soon {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: var(--border);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    align-self: center;
+  }
+  .tour-coming-soon em {
+    display: block;
+    font-style: normal;
+    color: var(--gold-dim);
+    font-size: 14px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+
+  .tour-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .tour-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tour-table td {
+    padding: 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: middle;
+  }
+  .tour-date {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .tour-venue {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--white);
+  }
+  .tour-city {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .tour-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 1px solid;
+  }
+  .status-tba { color: var(--muted); border-color: var(--border); }
+  .status-soon { color: var(--gold); border-color: var(--gold-dim); }
+
+  .booking-cta {
+    margin: 48px;
+    padding: 40px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+  }
+  .booking-text h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .booking-text p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── MERCH / STORE ── */
+  #merch { background: var(--black); }
+
+  .store-notice {
+    margin: 0 48px 32px;
+    padding: 16px 24px;
+    background: rgba(200,164,90,0.06);
+    border: 1px solid rgba(200,164,90,0.2);
+    border-left: 3px solid var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--warm);
+    letter-spacing: 0.05em;
+  }
+
+  .store-filter {
+    margin: 0 48px 32px;
+    display: flex;
+    gap: 4px;
+  }
+  .filter-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn.active,
+  .filter-btn:hover { background: var(--gold); color: var(--black); border-color: var(--gold); }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    margin: 0 48px;
+    border: 1px solid var(--border);
+  }
+
+  .product-card {
+    background: var(--surface);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .product-card:hover { background: var(--card); }
+
+  .product-img {
+    aspect-ratio: 1;
+    background: var(--card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-img-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--border);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .product-img-icon { font-size: 48px; }
+  .product-card:hover .product-img-placeholder { color: var(--gold-dim); }
+
+  .product-tag {
+    position: absolute;
+    top: 12px; right: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    background: var(--red);
+    color: white;
+  }
+  .product-tag.new { background: var(--gold); color: var(--black); }
+
+  .product-info { padding: 20px 24px; }
+  .product-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .product-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .product-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .product-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+  .product-price .currency {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    margin-right: 2px;
+  }
+  .add-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    background: transparent;
+    color: var(--warm);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .add-btn:hover { background: var(--gold); color: var(--black); border-color: var(--gold); }
+
+  /* CART */
+  .cart-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--deep);
+    border-top: 1px solid var(--border);
+    padding: 16px 48px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 500;
+    animation: slideUp 0.3s ease;
+  }
+  .cart-bar.visible { display: flex; }
+  .cart-info {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--warm);
+    letter-spacing: 0.1em;
+  }
+  .cart-info strong {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    margin-left: 12px;
+  }
+  .checkout-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    background: var(--gold);
+    color: var(--black);
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .checkout-btn:hover { background: var(--white); }
+
+  /* Stripe modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    width: min(560px, 95vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 48px;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--white); }
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--white);
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .modal-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    margin-bottom: 32px;
+    text-transform: uppercase;
+  }
+  .form-row { margin-bottom: 16px; }
+  .form-label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .form-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 12px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus { border-color: var(--gold); }
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .stripe-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-top: 16px;
+    text-align: center;
+  }
+  .stripe-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #635bff;
+    color: white;
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+
+  .cart-items-list { margin-bottom: 24px; }
+  .cart-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--warm);
+  }
+  .cart-line-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--gold);
+  }
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    margin-top: 4px;
+    margin-bottom: 24px;
+  }
+  .cart-total-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .cart-total-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--gold);
+  }
+
+  /* ── ABOUT ── */
+  #about { background: var(--black); }
+
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    min-height: calc(100vh - 240px);
+  }
+  .about-left {
+    padding: 0 48px 48px;
+    border-right: 1px solid var(--border);
+  }
+  .about-right { padding: 0 48px 48px; }
+
+  .about-portrait {
+    aspect-ratio: 3/4;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--border);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.15em;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-portrait::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(200,164,90,0.04) 0%, transparent 60%);
+  }
+
+  .bio-section { margin-bottom: 40px; }
+  .bio-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .bio-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--warm);
+  }
+
+  .about-facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+  .fact-item {
+    background: var(--surface);
+    padding: 20px;
+  }
+  .fact-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .fact-value {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--white);
+  }
+
+  .press-downloads { margin-top: 40px; }
+  .dl-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .dl-item:hover .dl-name { color: var(--gold); }
+  .dl-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--white);
+    transition: color 0.2s;
+  }
+  .dl-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-top: 2px;
+  }
+  .dl-arrow {
+    font-size: 14px;
+    color: var(--muted);
+    transition: color 0.2s, transform 0.2s;
+  }
+  .dl-item:hover .dl-arrow { color: var(--gold); transform: translateY(2px); }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--black); }
+
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 0 48px 48px;
+  }
+  .contact-left {
+    padding-right: 80px;
+    border-right: 1px solid var(--border);
+  }
+  .contact-right { padding-left: 80px; }
+
+  .contact-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--white);
+    letter-spacing: 0.03em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .contact-heading em {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--gold-dim);
+    font-style: normal;
+  }
+  .contact-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 40px;
+    line-height: 1.8;
+  }
+
+  .contact-types { margin-bottom: 40px; }
+  .contact-type-item {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .contact-type-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .contact-type-email {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--white);
+  }
+
+  .contact-form { }
+  .form-submit {
+    width: 100%;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 14px;
+    background: var(--gold);
+    color: var(--black);
+    border: none;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+  }
+  .form-submit:hover { background: var(--white); }
+
+  .newsletter-box {
+    margin-top: 40px;
+    padding: 32px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .newsletter-box h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .newsletter-box p {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+    line-height: 1.7;
+  }
+  .nl-input-row {
+    display: flex;
+    gap: 0;
+  }
+  .nl-input {
+    flex: 1;
+    background: var(--black);
+    border: 1px solid var(--border);
+    border-right: none;
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 12px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .nl-input:focus { border-color: var(--gold); }
+  .nl-btn {
+    background: var(--gold);
+    color: var(--black);
+    border: none;
+    padding: 12px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .nl-btn:hover { background: var(--white); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .footer-logo span { color: var(--gold-dim); }
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+  }
+  .footer-socials {
+    display: flex;
+    gap: 20px;
+  }
+  .footer-social {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-social:hover { color: var(--gold); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; width: 40px; }
+    50% { opacity: 1; width: 60px; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Section enter animation */
+  section.active > * {
+    animation: fadeIn 0.4s ease forwards;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .home-content { grid-template-columns: 1fr; padding: 0 24px; padding-top: 40px; gap: 40px; }
+    .home-right { align-items: flex-start; padding-left: 0; }
+    .home-right-content { max-width: 100%; }
+    .home-title { font-size: 72px; }
+    .home-sub { flex-direction: column; gap: 24px; align-items: flex-start; }
+    .home-stats { width: 100%; }
+    .stat-item { flex: 1; padding: 14px 12px; }
+    .page-header { padding: 40px 24px 24px; flex-direction: column; align-items: flex-start; gap: 8px; }
+    .section-body { padding: 24px; }
+    .about-layout, .contact-layout, .tour-intro { grid-template-columns: 1fr; }
+    .about-left { border-right: none; border-bottom: 1px solid var(--border); padding: 0 24px 40px; }
+    .about-right { padding: 40px 24px 24px; }
+    .contact-left { padding-right: 0; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 40px; }
+    .contact-right { padding-left: 0; padding-top: 40px; }
+    .contact-layout { padding: 0 24px 24px; }
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .videos-grid { grid-template-columns: 1fr; }
+    .video-featured { margin: 0 24px 24px; }
+    .tour-intro { padding: 0 24px 24px; }
+    .store-notice { margin: 0 24px 24px; }
+    .store-filter { margin: 0 24px 24px; }
+    .products-grid { margin: 0 24px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    .booking-cta { margin: 24px; flex-direction: column; gap: 20px; padding: 24px; }
+    .cart-bar { padding: 16px 24px; }
+  }
+
+  select.form-input { appearance: none; }
+  textarea.form-input { resize: vertical; min-height: 100px; }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo" onclick="showSection('home')">SWISHA <span>T</span></div>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showSection('home'); return false;">Home</a></li>
+    <li><a href="#" onclick="showSection('music'); return false;">Music</a></li>
+    <li><a href="#" onclick="showSection('videos'); return false;">Videos</a></li>
+    <li><a href="#" onclick="showSection('tour'); return false;">Tour</a></li>
+    <li><a href="#" onclick="showSection('about'); return false;">About</a></li>
+    <li><a href="#" onclick="showSection('contact'); return false;">Contact</a></li>
+  </ul>
+  <a href="#" class="nav-cta" onclick="showSection('merch'); return false;">Shop ↗</a>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     HOME
+═══════════════════════════════════════════════ -->
+<section id="home" class="active">
+  <div class="home-bg"></div>
+  <div class="home-grid-lines"></div>
+  <div class="home-content">
+    <div class="home-left">
+      <p class="home-eyebrow">Ottawa, CA &nbsp;·&nbsp; Hip Hop &amp; Trap &nbsp;·&nbsp; New Era 2026</p>
+      <h1 class="home-title">
+        SWISHA<br>
+        <span class="home-title-line2">T</span>
+      </h1>
+      <div class="home-sub">
+        <p class="home-tagline">Hard-hitting beats.<br>Real and unvarnished.<br>No compromise.</p>
+        <div class="home-stats">
+          <div class="stat-item">
+            <span class="stat-num">244K</span>
+            <span class="stat-label">Monthly Listeners</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">33.7K</span>
+            <span class="stat-label">Instagram</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">2026</span>
+            <span class="stat-label">New Era</span>
+          </div>
+        </div>
+      </div>
+      <div class="home-cta-row">
+        <a href="#" class="btn-primary" onclick="showSection('music'); return false;">▶ &nbsp; Stream Now</a>
+        <a href="#" class="btn-outline" onclick="showSection('merch'); return false;">Shop Merch</a>
+      </div>
+    </div>
+
+    <div class="home-right">
+      <div class="home-right-content">
+        <div>
+          <div class="home-right-label">— Featured Tracks</div>
+          <div class="home-featured-track">
+            <div class="home-track-title">NO LOVE</div>
+            <div class="home-track-meta">feat. 2Scratch &nbsp;·&nbsp; Top Track</div>
+            <a href="#" class="btn-primary" style="font-size:10px;padding:10px 20px;" onclick="showSection('music'); return false;">▶ &nbsp; Play</a>
+          </div>
+        </div>
+        <div>
+          <div class="home-right-label">— Catalog Highlights</div>
+          <div class="home-collab-row">
+            <div class="home-collab-item">
+              <span class="home-collab-name">SOBER</span>
+              <span class="home-collab-feat">feat. 2Scratch, Pressa</span>
+            </div>
+            <div class="home-collab-item">
+              <span class="home-collab-name">CHAPO</span>
+              <span class="home-collab-feat">feat. E.P.O, M.I.M.E</span>
+            </div>
+            <div class="home-collab-item">
+              <span class="home-collab-name">FALLEN SOUL</span>
+              <span class="home-collab-feat">feat. 2Scratch</span>
+            </div>
+            <div class="home-collab-item">
+              <span class="home-collab-name">LEGENDS</span>
+              <span class="home-collab-feat">Single</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="home-scroll-indicator">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll</span>
+  </div>
+  <div class="home-marquee">
+    <div class="marquee-track">
+      <span class="marquee-item"><span>✦</span> NO LOVE</span>
+      <span class="marquee-item"><span>✦</span> SOBER</span>
+      <span class="marquee-item"><span>✦</span> CHAPO</span>
+      <span class="marquee-item"><span>✦</span> FALLEN SOUL</span>
+      <span class="marquee-item"><span>✦</span> LEGENDS</span>
+      <span class="marquee-item"><span>✦</span> DISOBEDIENT</span>
+      <span class="marquee-item"><span>✦</span> CAN'T TRUST EM</span>
+      <span class="marquee-item"><span>✦</span> KILLER</span>
+      <span class="marquee-item"><span>✦</span> NO LOVE</span>
+      <span class="marquee-item"><span>✦</span> SOBER</span>
+      <span class="marquee-item"><span>✦</span> CHAPO</span>
+      <span class="marquee-item"><span>✦</span> FALLEN SOUL</span>
+      <span class="marquee-item"><span>✦</span> LEGENDS</span>
+      <span class="marquee-item"><span>✦</span> DISOBEDIENT</span>
+      <span class="marquee-item"><span>✦</span> CAN'T TRUST EM</span>
+      <span class="marquee-item"><span>✦</span> KILLER</span>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-logo">SWISHA <span>T</span></div>
+    <div class="footer-socials">
+      <a href="https://open.spotify.com/artist/1KNGrimbkpYFO5jKiBSCLZ" target="_blank" class="footer-social">Spotify</a>
+      <a href="#" class="footer-social">Instagram</a>
+      <a href="#" class="footer-social">TikTok</a>
+      <a href="#" class="footer-social">YouTube</a>
+    </div>
+    <p class="footer-copy">© 2026 Swisha T. All Rights Reserved.</p>
+  </footer>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MUSIC
+═══════════════════════════════════════════════ -->
+<section id="music">
+  <div class="page-header">
+    <h2 class="page-title">MU<em>SIC</em></h2>
+    <span class="page-count">244K MONTHLY LISTENERS — SPOTIFY</span>
+  </div>
+  <div class="section-body">
+    <div class="spotify-embed-wrapper">
+      <iframe style="border-radius:0" src="https://open.spotify.com/embed/artist/1KNGrimbkpYFO5jKiBSCLZ?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);">— Catalog</span>
+    </div>
+
+    <div class="releases-grid">
+      <div class="release-card">
+        <div class="release-cover">ST</div>
+        <div class="release-title">NO LOVE</div>
+        <div class="release-meta">feat. 2Scratch &nbsp;·&nbsp; Single</div>
+      </div>
+      <div class="release-card">
+        <div class="release-cover">ST</div>
+        <div class="release-title">SOBER</div>
+        <div class="release-meta">feat. 2Scratch, Pressa &nbsp;·&nbsp; Single</div>
+      </div>
+      <div class="release-card">
+        <div class="release-cover">ST</div>
+        <div class="release-title">CHAPO</div>
+        <div class="release-meta">feat. E.P.O, M.I.M.E &nbsp;·&nbsp; Single</div>
+      </div>
+      <div class="release-card">
+        <div class="release-cover">ST</div>
+        <div class="release-title">FALLEN SOUL</div>
+        <div class="release-meta">feat. 2Scratch &nbsp;·&nbsp; Single</div>
+      </div>
+      <div class="release-card">
+        <div class="release-cover">11:11</div>
+        <div class="release-title">11:11</div>
+        <div class="release-meta">Album &nbsp;·&nbsp; 2022</div>
+      </div>
+      <div class="release-card">
+        <div class="release-cover">RTR</div>
+        <div class="release-title">Road To Redemption</div>
+        <div class="release-meta">Album &nbsp;·&nbsp; 2021</div>
+      </div>
+      <div class="release-card">
+        <div class="release-cover">ST</div>
+        <div class="release-title">LEGENDS</div>
+        <div class="release-meta">Single</div>
+      </div>
+      <div class="release-card">
+        <div class="release-cover">ST</div>
+        <div class="release-title">CAN'T TRUST EM</div>
+        <div class="release-meta">feat. BREVIS &nbsp;·&nbsp; Single</div>
+      </div>
+    </div>
+
+    <div class="platform-links">
+      <a href="https://open.spotify.com/artist/1KNGrimbkpYFO5jKiBSCLZ" target="_blank" class="platform-btn">
+        <span class="platform-dot" style="background:#1DB954"></span> Spotify
+      </a>
+      <a href="https://music.apple.com/ca/artist/swisha-t/410265832" target="_blank" class="platform-btn">
+        <span class="platform-dot" style="background:#FC3C44"></span> Apple Music
+      </a>
+      <a href="#" class="platform-btn">
+        <span class="platform-dot" style="background:#ff0000"></span> YouTube Music
+      </a>
+      <a href="#" class="platform-btn">
+        <span class="platform-dot" style="background:#ff5500"></span> SoundCloud
+      </a>
+      <a href="#" class="platform-btn">
+        <span class="platform-dot" style="background:#1da0c3"></span> Deezer
+      </a>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-logo">SWISHA <span>T</span></div>
+    <div class="footer-socials">
+      <a href="https://open.spotify.com/artist/1KNGrimbkpYFO5jKiBSCLZ" target="_blank" class="footer-social">Spotify</a>
+      <a href="#" class="footer-social">Instagram</a>
+      <a href="#" class="footer-social">TikTok</a>
+    </div>
+    <p class="footer-copy">© 2026 Swisha T. All Rights Reserved.</p>
+  </footer>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     VIDEOS
+═══════════════════════════════════════════════ -->
+<section id="videos">
+  <div class="page-header">
+    <h2 class="page-title">VI<em>DEOS</em></h2>
+    <span class="page-count">YouTube Channel</span>
+  </div>
+  <div class="section-body" style="padding-bottom:16px;">
+    <div class="video-featured">
+      <div class="video-featured-placeholder">
+        <div class="video-play-btn">▶</div>
+        <p class="video-play-label">Official Music Video — Coming 2026</p>
+      </div>
+      <span class="featured-badge">Latest Release</span>
+    </div>
+
+    <div style="margin: 0 0 20px; display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);">— More Videos</span>
+      <a href="#" style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--muted);text-decoration:none;text-transform:uppercase;">View All on YouTube ↗</a>
+    </div>
+  </div>
+
+  <div class="videos-grid">
+    <div class="video-thumb">
+      <div class="video-thumb-icon">▶</div>
+      <div class="video-thumb-label">NO LOVE (Official Video)</div>
+    </div>
+    <div class="video-thumb">
+      <div class="video-thumb-icon">▶</div>
+      <div class="video-thumb-label">SOBER (Official Video)</div>
+    </div>
+    <div class="video-thumb">
+      <div class="video-thumb-icon">▶</div>
+      <div class="video-thumb-label">CHAPO (Visualizer)</div>
+    </div>
+    <div class="video-thumb">
+      <div class="video-thumb-icon">▶</div>
+      <div class="video-thumb-label">FALLEN SOUL (Lyric Video)</div>
+    </div>
+    <div class="video-thumb">
+      <div class="video-thumb-icon">▶</div>
+      <div class="video-thumb-label">Behind The Music</div>
+    </div>
+    <div class="video-thumb">
+      <div class="video-thumb-icon">▶</div>
+      <div class="video-thumb-label">LEGENDS (Live Session)</div>
+    </div>
+  </div>
+
+  <footer style="margin-top:48px;">
+    <div class="footer-logo">SWISHA <span>T</span></div>
+    <div class="footer-socials">
+      <a href="https://open.spotify.com/artist/1KNGrimbkpYFO5jKiBSCLZ" target="_blank" class="footer-social">Spotify</a>
+      <a href="#" class="footer-social">Instagram</a>
+      <a href="#" class="footer-social">YouTube</a>
+    </div>
+    <p class="footer-copy">© 2026 Swisha T. All Rights Reserved.</p>
+  </footer>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     TOUR
+═══════════════════════════════════════════════ -->
+<section id="tour">
+  <div class="page-header">
+    <h2 class="page-title">TO<em>UR</em></h2>
+    <span class="page-count">Live Dates</span>
+  </div>
+  <div class="section-body">
+    <div class="tour-intro">
+      <div>
+        <p class="bio-label">Live</p>
+        <p class="tour-intro-text">
+          Tour dates for 2026 are being confirmed now.<br>
+          Shows will be announced first to the mailing list —<br>
+          subscribe below to be first in line for tickets.<br><br>
+          For booking enquiries, use the contact form.
+        </p>
+        <div style="margin-top:24px;">
+          <div class="nl-input-row" style="max-width:340px;">
+            <input type="email" class="nl-input" placeholder="your@email.com">
+            <button class="nl-btn">Notify Me</button>
+          </div>
+        </div>
+      </div>
+      <div class="tour-coming-soon">
+        <em>— Dates</em>
+        COMING<br>SOON
+      </div>
+    </div>
+
+    <table class="tour-table" style="margin:0 0 48px;">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Venue</th>
+          <th>City</th>
+          <th>Tickets</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="tour-date">TBA</div></td>
+          <td><div class="tour-venue">TBA</div><div class="tour-city">Berlin, Germany</div></td>
+          <td><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">DE</div></td>
+          <td><span class="tour-status status-tba">To Be Announced</span></td>
+        </tr>
+        <tr>
+          <td><div class="tour-date">TBA</div></td>
+          <td><div class="tour-venue">TBA</div><div class="tour-city">Hamburg, Germany</div></td>
+          <td><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">DE</div></td>
+          <td><span class="tour-status status-tba">To Be Announced</span></td>
+        </tr>
+        <tr>
+          <td><div class="tour-date">TBA</div></td>
+          <td><div class="tour-venue">TBA</div><div class="tour-city">Munich, Germany</div></td>
+          <td><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">DE</div></td>
+          <td><span class="tour-status status-tba">To Be Announced</span></td>
+        </tr>
+        <tr>
+          <td><div class="tour-date">TBA</div></td>
+          <td><div class="tour-venue">TBA</div><div class="tour-city">Ottawa, Canada</div></td>
+          <td><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">CA</div></td>
+          <td><span class="tour-status status-tba">To Be Announced</span></td>
+        </tr>
+        <tr>
+          <td><div class="tour-date">TBA</div></td>
+          <td><div class="tour-venue">TBA</div><div class="tour-city">Toronto, Canada</div></td>
+          <td><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">CA</div></td>
+          <td><span class="tour-status status-tba">To Be Announced</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="booking-cta">
+      <div class="booking-text">
+        <h3>Book Swisha T</h3>
+        <p>For live bookings, festivals, private events, and press enquiries.</p>
+      </div>
+      <a href="#" class="btn-primary" onclick="showSection('contact'); return false;">Booking Enquiry →</a>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-logo">SWISHA <span>T</span></div>
+    <div class="footer-socials">
+      <a href="https://open.spotify.com/artist/1KNGrimbkpYFO5jKiBSCLZ" target="_blank" class="footer-social">Spotify</a>
+      <a href="#" class="footer-social">Instagram</a>
+      <a href="#" class="footer-social">TikTok</a>
+    </div>
+    <p class="footer-copy">© 2026 Swisha T. All Rights Reserved.</p>
+  </footer>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     MERCH / STORE
+═══════════════════════════════════════════════ -->
+<section id="merch">
+  <div class="page-header">
+    <h2 class="page-title">SH<em>OP</em></h2>
+    <span class="page-count" id="cart-count">0 Items in Cart</span>
+  </div>
+  <div class="section-body" style="padding-bottom:16px;">
+    <div class="store-notice">
+      ⚡ &nbsp; Official Swisha T merch. All orders processed securely via Stripe. Ships worldwide.
+    </div>
+    <div class="store-filter">
+      <button class="filter-btn active" onclick="filterStore(this,'all')">All</button>
+      <button class="filter-btn" onclick="filterStore(this,'tees')">Tees</button>
+      <button class="filter-btn" onclick="filterStore(this,'hoodies')">Hoodies</button>
+      <button class="filter-btn" onclick="filterStore(this,'caps')">Caps</button>
+      <button class="filter-btn" onclick="filterStore(this,'posters')">Posters</button>
+    </div>
+  </div>
+
+  <div class="products-grid">
+    <!-- T-SHIRTS -->
+    <div class="product-card" data-cat="tees">
+      <div class="product-img">
+        <div class="product-img-placeholder">
+          <span class="product-img-icon">👕</span>
+          <span>Design Coming</span>
+        </div>
+        <span class="product-tag new">New Era</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">SWISHA T — Logo Tee</div>
+        <div class="product-sub">Heavyweight Cotton &nbsp;·&nbsp; Black / White / Sand</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">CAD</span>38</div>
+          <button class="add-btn" onclick="addToCart('SWISHA T Logo Tee', 38)">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="tees">
+      <div class="product-img">
+        <div class="product-img-placeholder">
+          <span class="product-img-icon">👕</span>
+          <span>Design Coming</span>
+        </div>
+        <span class="product-tag new">New Era</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">NO LOVE Graphic Tee</div>
+        <div class="product-sub">Heavyweight Cotton &nbsp;·&nbsp; Black</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">CAD</span>38</div>
+          <button class="add-btn" onclick="addToCart('NO LOVE Graphic Tee', 38)">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOODIES -->
+    <div class="product-card" data-cat="hoodies">
+      <div class="product-img">
+        <div class="product-img-placeholder">
+          <span class="product-img-icon">🧥</span>
+          <span>Design Coming</span>
+        </div>
+        <span class="product-tag new">New Era</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">ST Pullover Hoodie</div>
+        <div class="product-sub">400gsm Fleece &nbsp;·&nbsp; Black / Charcoal</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">CAD</span>72</div>
+          <button class="add-btn" onclick="addToCart('ST Pullover Hoodie', 72)">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="hoodies">
+      <div class="product-img">
+        <div class="product-img-placeholder">
+          <span class="product-img-icon">🧥</span>
+          <span>Design Coming</span>
+        </div>
+        <span class="product-tag new">New Era</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">SWISHA T Zip Hoodie</div>
+        <div class="product-sub">400gsm Fleece &nbsp;·&nbsp; Black</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">CAD</span>78</div>
+          <button class="add-btn" onclick="addToCart('SWISHA T Zip Hoodie', 78)">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAPS -->
+    <div class="product-card" data-cat="caps">
+      <div class="product-img">
+        <div class="product-img-placeholder">
+          <span class="product-img-icon">🧢</span>
+          <span>Design Coming</span>
+        </div>
+        <span class="product-tag new">New Era</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">ST Snapback Cap</div>
+        <div class="product-sub">Structured &nbsp;·&nbsp; Black / Black</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">CAD</span>32</div>
+          <button class="add-btn" onclick="addToCart('ST Snapback Cap', 32)">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- POSTERS -->
+    <div class="product-card" data-cat="posters">
+      <div class="product-img">
+        <div class="product-img-placeholder">
+          <span class="product-img-icon">🖼️</span>
+          <span>Design Coming</span>
+        </div>
+        <span class="product-tag" style="background:var(--gold);color:var(--black);">Signed</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">Signed Limited Poster</div>
+        <div class="product-sub">A2 Print &nbsp;·&nbsp; Limited to 200</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">CAD</span>28</div>
+          <button class="add-btn" onclick="addToCart('Signed Limited Poster', 28)">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUNDLE -->
+    <div class="product-card" data-cat="all">
+      <div class="product-img">
+        <div class="product-img-placeholder" style="flex-direction:row;gap:4px;">
+          <span style="font-size:28px;">👕</span>
+          <span style="font-size:28px;">🖼️</span>
+        </div>
+        <span class="product-tag" style="background:#7B68EE;color:white;">Bundle</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">Tee + Signed Poster Bundle</div>
+        <div class="product-sub">Save CAD 8 vs. buying separate</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">CAD</span>58</div>
+          <button class="add-btn" onclick="addToCart('Tee + Poster Bundle', 58)">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="all">
+      <div class="product-img">
+        <div class="product-img-placeholder" style="flex-direction:row;gap:4px;">
+          <span style="font-size:28px;">🧥</span>
+          <span style="font-size:28px;">🖼️</span>
+        </div>
+        <span class="product-tag" style="background:#7B68EE;color:white;">Bundle</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">Hoodie + Signed Poster Bundle</div>
+        <div class="product-sub">Save CAD 12 vs. buying separate</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">CAD</span>88</div>
+          <button class="add-btn" onclick="addToCart('Hoodie + Poster Bundle', 88)">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-bar" id="cart-bar">
+    <div class="cart-info">
+      <span id="cart-bar-label">Cart</span>
+      <strong id="cart-bar-total">CAD 0</strong>
+    </div>
+    <button class="checkout-btn" onclick="openCheckout()">Checkout via Stripe →</button>
+  </div>
+
+  <footer style="margin-top:60px;margin-bottom:0;">
+    <div class="footer-logo">SWISHA <span>T</span></div>
+    <div class="footer-socials">
+      <a href="https://open.spotify.com/artist/1KNGrimbkpYFO5jKiBSCLZ" target="_blank" class="footer-social">Spotify</a>
+      <a href="#" class="footer-social">Instagram</a>
+      <a href="#" class="footer-social">TikTok</a>
+    </div>
+    <p class="footer-copy">© 2026 Swisha T. All Rights Reserved.</p>
+  </footer>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     ABOUT / PRESS
+═══════════════════════════════════════════════ -->
+<section id="about">
+  <div class="page-header">
+    <h2 class="page-title">ABOUT<em> / PRESS</em></h2>
+    <span class="page-count">EPK &amp; Media</span>
+  </div>
+  <div class="section-body" style="padding-bottom:0;">
+    <div class="about-layout">
+      <div class="about-left">
+        <div class="about-portrait">
+          <span style="font-size:48px;color:var(--border);">📷</span>
+          <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;">Press Photo — Coming Soon</span>
+        </div>
+        <div class="about-facts">
+          <div class="fact-item">
+            <div class="fact-label">Based In</div>
+            <div class="fact-value">Ottawa, Canada</div>
+          </div>
+          <div class="fact-item">
+            <div class="fact-label">Genre</div>
+            <div class="fact-value">Hip Hop / Trap</div>
+          </div>
+          <div class="fact-item">
+            <div class="fact-label">Monthly Listeners</div>
+            <div class="fact-value">244K — Spotify</div>
+          </div>
+          <div class="fact-item">
+            <div class="fact-label">Primary Market</div>
+            <div class="fact-value">Germany / Canada</div>
+          </div>
+          <div class="fact-item">
+            <div class="fact-label">Active Since</div>
+            <div class="fact-value">2018</div>
+          </div>
+          <div class="fact-item">
+            <div class="fact-label">Label</div>
+            <div class="fact-value">Independent</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-right">
+        <div class="bio-section">
+          <div class="bio-label">— Short Bio (50 words)</div>
+          <p class="bio-text">
+            Swisha T is an Ottawa-born rapper with 244K monthly listeners whose music lives at the collision of hard-hitting trap production and unflinching lyricism. Known for collaborations with 2Scratch and Pressa, his sound has built a significant following across Germany and Canada.
+          </p>
+        </div>
+        <div class="bio-section">
+          <div class="bio-label">— Artist Bio</div>
+          <p class="bio-text">
+            From Ottawa, Canada, Swisha T has built a reputation on the authenticity of his craft. Combining the gritty energy of trap production with deeply personal lyricism, his music resonates with listeners across continents — particularly in Germany, where his fanbase runs deepest.<br><br>
+            Known for hard-hitting tracks like "NO LOVE," "Sober" (with 2Scratch and Pressa), and "Chapo," Swisha T's catalog reflects an artist unafraid to explore the full weight of his experience. His collaborative approach has produced some of the most-streamed moments of his career, and his return in 2026 marks a deliberate new chapter — sharper, more intentional, and built to last.<br><br>
+            With 7 new songs and a completed music video, the next era of Swisha T is ready.
+          </p>
+        </div>
+        <div class="press-downloads">
+          <div class="bio-label">— Press Downloads</div>
+          <a href="#" class="dl-item">
+            <div>
+              <div class="dl-name">Press Photo Set — Hi-Res</div>
+              <div class="dl-meta">JPG &nbsp;·&nbsp; 300 DPI &nbsp;·&nbsp; Coming Soon</div>
+            </div>
+            <span class="dl-arrow">↓</span>
+          </a>
+          <a href="#" class="dl-item">
+            <div>
+              <div class="dl-name">Artist Bio — All Lengths</div>
+              <div class="dl-meta">PDF &nbsp;·&nbsp; EN / DE</div>
+            </div>
+            <span class="dl-arrow">↓</span>
+          </a>
+          <a href="#" class="dl-item">
+            <div>
+              <div class="dl-name">Electronic Press Kit (EPK)</div>
+              <div class="dl-meta">PDF &nbsp;·&nbsp; Full Package</div>
+            </div>
+            <span class="dl-arrow">↓</span>
+          </a>
+          <a href="#" class="dl-item">
+            <div>
+              <div class="dl-name">Logo &amp; Wordmark Files</div>
+              <div class="dl-meta">SVG / PNG &nbsp;·&nbsp; Black + White</div>
+            </div>
+            <span class="dl-arrow">↓</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer style="margin-top:48px;">
+    <div class="footer-logo">SWISHA <span>T</span></div>
+    <div class="footer-socials">
+      <a href="https://open.spotify.com/artist/1KNGrimbkpYFO5jKiBSCLZ" target="_blank" class="footer-social">Spotify</a>
+      <a href="#" class="footer-social">Instagram</a>
+      <a href="#" class="footer-social">TikTok</a>
+    </div>
+    <p class="footer-copy">© 2026 Swisha T. All Rights Reserved.</p>
+  </footer>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="page-header">
+    <h2 class="page-title">CON<em>TACT</em></h2>
+    <span class="page-count">Management &amp; Booking</span>
+  </div>
+  <div class="section-body">
+    <div class="contact-layout" style="padding:0;">
+      <div class="contact-left">
+        <h3 class="contact-heading">GET IN<br><em>TOUCH</em></h3>
+        <p class="contact-sub">
+          For booking, press, sync opportunities,<br>
+          collaborations, and general enquiries.
+        </p>
+        <div class="contact-types">
+          <div class="contact-type-item">
+            <div class="contact-type-label">Management</div>
+            <div class="contact-type-email">management@swishat.com</div>
+          </div>
+          <div class="contact-type-item">
+            <div class="contact-type-label">Booking</div>
+            <div class="contact-type-email">booking@swishat.com</div>
+          </div>
+          <div class="contact-type-item">
+            <div class="contact-type-label">Press &amp; Media</div>
+            <div class="contact-type-email">press@swishat.com</div>
+          </div>
+          <div class="contact-type-item">
+            <div class="contact-type-label">Sync &amp; Licensing</div>
+            <div class="contact-type-email">sync@swishat.com</div>
+          </div>
+        </div>
+        <div class="newsletter-box">
+          <h3>Stay Connected</h3>
+          <p>First access to tour dates, releases,<br>and drops. No spam, ever.</p>
+          <div class="nl-input-row">
+            <input type="email" class="nl-input" placeholder="your@email.com">
+            <button class="nl-btn" onclick="handleNewsletter(this)">Subscribe</button>
+          </div>
+        </div>
+      </div>
+      <div class="contact-right">
+        <div class="contact-form">
+          <div class="bio-label" style="margin-bottom:24px;">— Send a Message</div>
+          <div class="form-row">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-input" placeholder="Your name">
+          </div>
+          <div class="form-row">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" placeholder="your@email.com">
+          </div>
+          <div class="form-row">
+            <label class="form-label">Enquiry Type</label>
+            <select class="form-input">
+              <option value="">Select enquiry type</option>
+              <option>Booking / Live Show</option>
+              <option>Press / Interview</option>
+              <option>Sync / Licensing</option>
+              <option>Collaboration</option>
+              <option>Fan Message</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Message</label>
+            <textarea class="form-input" rows="5" placeholder="Tell us more..."></textarea>
+          </div>
+          <button class="form-submit" onclick="handleContactSubmit(this)">Send Message →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-logo">SWISHA <span>T</span></div>
+    <div class="footer-socials">
+      <a href="https://open.spotify.com/artist/1KNGrimbkpYFO5jKiBSCLZ" target="_blank" class="footer-social">Spotify</a>
+      <a href="#" class="footer-social">Instagram</a>
+      <a href="#" class="footer-social">TikTok</a>
+      <a href="#" class="footer-social">YouTube</a>
+    </div>
+    <p class="footer-copy">© 2026 Swisha T. All Rights Reserved.</p>
+  </footer>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     STRIPE CHECKOUT MODAL
+═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeCheckout()">✕</button>
+    <div class="modal-title">Checkout</div>
+    <div class="modal-sub">Secure payment via <span class="stripe-logo">stripe</span></div>
+
+    <div class="cart-items-list" id="modal-cart-items"></div>
+    <div class="cart-total">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-price" id="modal-total">CAD 0</span>
+    </div>
+
+    <div class="bio-label" style="margin-bottom:16px;">— Shipping Details</div>
+    <div class="form-row">
+      <label class="form-label">Full Name</label>
+      <input type="text" class="form-input" placeholder="Your name">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-input" placeholder="your@email.com">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Shipping Address</label>
+      <input type="text" class="form-input" placeholder="Street address">
+    </div>
+    <div class="form-row form-row-2">
+      <div>
+        <label class="form-label">City</label>
+        <input type="text" class="form-input" placeholder="City">
+      </div>
+      <div>
+        <label class="form-label">Postal / ZIP Code</label>
+        <input type="text" class="form-input" placeholder="Postal code">
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Country</label>
+      <select class="form-input">
+        <option>Canada</option>
+        <option>Germany</option>
+        <option>United States</option>
+        <option>Austria</option>
+        <option>Switzerland</option>
+        <option>United Kingdom</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="bio-label" style="margin-top:24px;margin-bottom:16px;">— Payment</div>
+    <div class="form-row">
+      <label class="form-label">Card Number</label>
+      <input type="text" class="form-input" placeholder="Connect Stripe to enable card processing" readonly style="cursor:not-allowed;color:var(--muted);">
+    </div>
+
+    <button class="form-submit" onclick="handleStripeCheckout(this)" style="margin-top:16px;">Pay with Stripe →</button>
+    <p class="stripe-note">
+      Payment powered by <span class="stripe-logo">stripe</span> &nbsp;·&nbsp;
+      Your payment info is never stored on our servers &nbsp;·&nbsp; Ships worldwide
+    </p>
+  </div>
+</div>
+
+<script>
+  // ── NAVIGATION ──────────────────────────────
+  function showSection(id) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById(id);
+    if (target) {
+      target.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+    // close cart bar if leaving store
+    if (id !== 'merch') {
+      document.getElementById('cart-bar').classList.remove('visible');
+    } else {
+      updateCartBar();
+    }
+  }
+
+  // ── CART ─────────────────────────────────────
+  let cart = [];
+
+  function addToCart(name, price) {
+    const existing = cart.find(i => i.name === name);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ name, price, qty: 1 });
+    }
+    updateCartBar();
+    showAddFeedback(event.target);
+  }
+
+  function showAddFeedback(btn) {
+    const original = btn.textContent;
+    btn.textContent = '✓ Added';
+    btn.style.background = 'var(--gold)';
+    btn.style.color = 'var(--black)';
+    btn.style.borderColor = 'var(--gold)';
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 1200);
+  }
+
+  function updateCartBar() {
+    const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    const count = cart.reduce((sum, i) => sum + i.qty, 0);
+    document.getElementById('cart-bar-total').textContent = 'CAD ' + total;
+    document.getElementById('cart-bar-label').textContent = count + ' item' + (count !== 1 ? 's' : '') + ' in cart';
+    document.getElementById('cart-count').textContent = count + ' Item' + (count !== 1 ? 's' : '') + ' in Cart';
+    const bar = document.getElementById('cart-bar');
+    if (count > 0) bar.classList.add('visible');
+    else bar.classList.remove('visible');
+  }
+
+  // ── CHECKOUT ─────────────────────────────────
+  function openCheckout() {
+    const modal = document.getElementById('checkout-modal');
+    const itemsEl = document.getElementById('modal-cart-items');
+    const totalEl = document.getElementById('modal-total');
+
+    itemsEl.innerHTML = cart.map(i => `
+      <div class="cart-line">
+        <span>${i.name} ${i.qty > 1 ? '×' + i.qty : ''}</span>
+        <span class="cart-line-price">CAD ${i.price * i.qty}</span>
+      </div>
+    `).join('');
+
+    const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    totalEl.textContent = 'CAD ' + total;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCheckout() {
+    document.getElementById('checkout-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleStripeCheckout(btn) {
+    btn.textContent = 'Connecting to Stripe...';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = '⚡ Connect your Stripe account to activate payments';
+      btn.disabled = false;
+      btn.style.background = 'var(--surface)';
+      btn.style.color = 'var(--gold)';
+    }, 1200);
+  }
+
+  // ── STORE FILTER ──────────────────────────────
+  function filterStore(btn, cat) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.product-card').forEach(card => {
+      const cardCat = card.dataset.cat;
+      card.style.display = (cat === 'all' || cardCat === cat || cardCat === 'all') ? 'block' : 'none';
+    });
+  }
+
+  // ── FORMS ─────────────────────────────────────
+  function handleNewsletter(btn) {
+    const input = btn.previousElementSibling;
+    if (!input.value.includes('@')) {
+      input.style.borderColor = 'var(--red)';
+      setTimeout(() => input.style.borderColor = '', 1500);
+      return;
+    }
+    btn.textContent = '✓ Subscribed';
+    btn.style.background = 'var(--white)';
+    input.value = '';
+    setTimeout(() => {
+      btn.textContent = 'Subscribe';
+      btn.style.background = '';
+    }, 2500);
+  }
+
+  function handleContactSubmit(btn) {
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = '✓ Message Sent — We\'ll be in touch.';
+      btn.style.background = 'var(--surface)';
+      btn.style.color = 'var(--gold)';
+    }, 1000);
+  }
+
+  // ── CLOSE MODAL ON OVERLAY CLICK ─────────────
+  document.getElementById('checkout-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeCheckout();
+  });
+</script>
+</body>
+</html>
