@@ -3,7 +3,7 @@
   "short_name": "Swisha T",
   "description": "Official website of Swisha T — Ottawa hip-hop & trap artist.",
   "start_url": "/",
-  "display": "standalone",
+  "display": "browser",
   "background_color": "#0A0806",
   "theme_color": "#C8952A",
   "icons": [
