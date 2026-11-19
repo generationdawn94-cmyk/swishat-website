@@ -1,13 +1,14 @@
 {
   "name": "Swisha T — Official",
   "short_name": "Swisha T",
-  "description": "Official website of Swisha T — Ottawa hip-hop & trap artist.",
+  "description": "Official website of Swisha T — Ottawa hip-hop & trap artist. New single Pray out July 3, 2026 — out now.",
   "start_url": "/",
-  "display": "browser",
-  "background_color": "#0A0806",
+  "display": "standalone",
+  "background_color": "#0F0D0A",
   "theme_color": "#C8952A",
   "icons": [
     { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/favicon-192x192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
