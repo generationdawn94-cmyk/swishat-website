@@ -1,4 +1,15 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://generationdawn.com/sitemap.xml
+# Sitemap location
+Sitemap: https://swishamusic.com/sitemap.xml
+
+# Welcome all major crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
